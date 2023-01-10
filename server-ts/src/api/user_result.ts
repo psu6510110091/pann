@@ -1,13 +1,28 @@
 import Router from "koa-router";
 import db from "../db";
 import { nestObject } from './utils'
+import { AuthData } from 'auth'
 
 const router = new Router()
 
-router 
-.get('/', async (ctx, next) => {
+const makeQuery = () => db('userResult').select(
+  'userResult.*',
+  'announcement.topic as announcementTopic',
+  'announcement.description as announcementDescription',
+  'announcement.remarkIfPositive as announcementRemarkIfPositive',
+  'announcement.remarkIfNegative as announcementRemarkIfNegative',
+  'announcement.pubDateTime as announcementPubDateTime'
+).leftJoin('announcement', 'userResult.announcementId', 'announcement.id')
+const findById = (id: number) => makeQuery().where({ 'userResult.id': id })
 
-    let query = db('userResult').select('*')
+const updateUserResult = (id: number, userCode: string, data: any) => {
+  return db('userResult').where({ id, userCode }).update(data)
+}
+
+router 
+  .get('/', async (ctx, next) => {
+    const authData = ctx.state.authData as AuthData
+    let query = makeQuery()
     if (ctx.request.query['announcementId']) {
       const announcementId = Number(ctx.request.query['announcementId'])
       query = query.where({ announcementId })
