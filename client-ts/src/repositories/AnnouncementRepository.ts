@@ -1,14 +1,19 @@
-import Announcement from "../models/Announcement";
+import { ax } from '../config';
 import { IRepository } from "./IRepository";
+import Announcement from "../models/Announcement";
+import config from "../config";
+
+export interface AnnouncementFilter {
+  keyword?: string
+}
 
 export class AnnouncementRepository implements IRepository<Announcement> {
-  
-  async getAll(): Promise<Announcement[] | null> {
+  urlPrefix = config.remoteRepositoryUrlPrefix
 
-    return [
-      { id: 1, topic: '240-124 Midterm 1/2566', description: 'คะแนนกลางภาควิชา Web Dev',remarkIfPositive: '', remarkIfNegative: '', pubDateTime: new Date('2022-09-08 10:00:00'), userCode: 'suthon.s' },
-      { id: 2, topic: 'ทุนเรียนดีประจำปี 2566', description: 'test', remarkIfPositive: 'ขอแสดงความยินดีกับผุ้ได้รับทุนเรียนดีทุกคนด้วย', remarkIfNegative: '', pubDateTime: new Date('2022-09-09 15:00:00'), userCode: 'suthon.s'}
-    ]
+  async getAll(filter: AnnouncementFilter): Promise<Announcement[] | null> {
+    const params = {...filter}
+    const resp = await ax.get<Announcement[]>(`${this.urlPrefix}/announcement`, { params })
 
+    return resp.data
   }
 }
