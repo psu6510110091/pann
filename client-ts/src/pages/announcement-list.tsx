@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, useCallback } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { Button, Dialog, DialogTitle, Grid, IconButton, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { Add, Close } from '@mui/icons-material/';
@@ -15,7 +15,10 @@ function AnnouncementList() {
   const [searchFilter, setSearchFilter] = useState('');
   const [createFormPopup, setCreateFormPopup] = useState(false);
 
-  const fetchAnnouncementList = useCallback(async () => {
+  const onUpdateAnnouncement = (announcement: Announcement) => {
+    setAnnouncementList(prevAnnouncementList => prevAnnouncementList.map(item => item.id === announcement.id ? announcement : item))}
+
+  const fetchAnnouncementList = async () => {
     let params = {
       keyword: searchFilter
     }
@@ -26,7 +29,7 @@ function AnnouncementList() {
       }
       setAnnouncementList(result)
     }
-  }, [announcementList.length, searchFilter])
+  }
 
   const handleChangeSearchFilter = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchFilter(event.target.value);
@@ -41,7 +44,7 @@ function AnnouncementList() {
 
   useEffect(() => {
     fetchAnnouncementList()
-  }, [fetchAnnouncementList, searchFilter])
+  }, [searchFilter])
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -55,7 +58,7 @@ function AnnouncementList() {
         <Grid container sx={{ p: 2 }} spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 8, md: 12, lg: 12, xl: 10 }}>
           {announcementList.map((ann, index) =>
             <Grid item xs={2} sm={4} md={4} lg={3} xl={2} key={index}>
-              <AnnouncementCard announcement={ann} callbackFetchFn={fetchAnnouncementList}></AnnouncementCard>
+              <AnnouncementCard announcement={ann} callbackFetchFn={fetchAnnouncementList} onUpdateAnnouncement={onUpdateAnnouncement}></AnnouncementCard>
             </Grid>
           )}
         </Grid>
