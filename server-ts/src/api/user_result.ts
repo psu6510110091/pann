@@ -13,7 +13,6 @@ const makeQuery = () => db('userResult').select(
   'announcement.remarkIfNegative as announcementRemarkIfNegative',
   'announcement.pubDateTime as announcementPubDateTime'
 ).leftJoin('announcement', 'userResult.announcementId', 'announcement.id')
-const findById = (id: number) => makeQuery().where({ 'userResult.id': id })
 
 const updateUserResult = (id: number, userCode: string, data: any) => {
   return db('userResult').where({ id, userCode }).update(data)
