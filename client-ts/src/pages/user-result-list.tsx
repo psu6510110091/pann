@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Grid, MenuItem, Select, SelectChangeEvent, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import PannAppBar from '../components/pann-app-bar';
@@ -10,6 +10,9 @@ function UserResultList() {
   const [userResultList, setUserResultList] = useState<UserResult[]>([])
   const [selectFilter, setSelectFilter] = useState('');
   const [searchFilter, setSearchFilter] = useState('');
+
+  const onUpdateUserResult = (userResult: UserResult) => {
+    setUserResultList(prevUserResultList => prevUserResultList.map(item => item.id === userResult.id ? userResult : item))}
 
   const fetchUserResultList = async () => {
     let params: { keyword?: string, isPinned?: boolean } = {}
@@ -36,13 +39,9 @@ function UserResultList() {
     setSearchFilter(event.target.value);
   };
 
-  const fetchUserResultListCb = useCallback(fetchUserResultList,[searchFilter, selectFilter, userResultList.length])
   useEffect(() => {
-    fetchUserResultListCb().then(()=>{
-      // clean up function
-      return ()=>console.log("Clean Up")
-    })
-  }, [selectFilter, searchFilter, fetchUserResultListCb])
+    fetchUserResultList()
+  }, [selectFilter, searchFilter])
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -58,13 +57,13 @@ function UserResultList() {
         </MenuItem>
         <MenuItem value={1}>Pinned</MenuItem>
       </Select>
-      <TextField sx={{ m: 2, minWidth: 120 }} label="Search" variant="outlined" value={searchFilter} onChange={handleChangeSearchFilter} />
+      <TextField sx={{ m: 2, minWidth: 120 }} label="Search" placeholder="Topic, Description" variant="outlined" value={searchFilter} onChange={handleChangeSearchFilter} />
       {userResultList.length
         ?
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 8, md: 12, lg: 12, xl: 10 }}>
           {userResultList.map((userResult, index) =>
             <Grid item xs={2} sm={4} md={4} lg={3} xl={2} key={index}>
-              <UserResultCard userResult={userResult}></UserResultCard>
+              <UserResultCard userResult={userResult} onUpdateUserResult={onUpdateUserResult}></UserResultCard>
             </Grid>
           )}
         </Grid>
