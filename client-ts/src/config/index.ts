@@ -20,8 +20,7 @@ ax.interceptors.request.use(
     config => {
         const oidcStorage = sessionStorage.getItem(`oidc.user:${oidcConfig.authority}:${oidcConfig.client_id}`)
         if(config.headers && oidcStorage){
-            const user = User.fromStorageString(oidcStorage);
-            const config = { headers: { Authorization: `Bearer ${user.access_token}` }}
+            const user = User.fromStorageString(oidcStorage)
             config.headers['Authorization'] = `Bearer ${user.access_token}`;
         }
         return config
