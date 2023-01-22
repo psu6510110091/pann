@@ -58,7 +58,7 @@ function Login() {
       <div className="logo-button-container">
         <div className="content-container">
           <div className="logo-container">
-            <img src={require('../Image/Logo-PSU-EH-01.png')} alt="Logo" className="logo-img" />
+            <img src={require('../image/psu.png')} alt="Logo" className="logo-img" />
           </div>
           <div className="text-content-wrapper">
             <div className="text-content">Welcome to PSU Announcement!</div>
