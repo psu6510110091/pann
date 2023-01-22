@@ -49,7 +49,7 @@ function Login() {
         <Navigate to={backTo} replace />
       );
     } else {
-      return <div>Waiting for whoami</div>;
+      return <div>Waiting a minute...</div>;
     }
   }
 
@@ -61,12 +61,12 @@ function Login() {
             <img src={require('../image/psu.png')} alt="Logo" className="logo-img" />
           </div>
           <div className="text-content-wrapper">
-            <div className="text-content">Welcome to PSU Announcement!</div>
+            <div className="hit-the-floor">Welcome to PSU Announcement</div>
           </div>
         </div>
-        <div className="button-container">
+        <div>
           <button className="login-button" onClick={() => void auth.signinRedirect()}>
-            Log in
+            Enter Website
           </button>
         </div>
       </div>
