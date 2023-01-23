@@ -119,3 +119,24 @@
   body {
     background-color: #f1f1f1;
   }
+
+  .loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .loading-spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .loading-text {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 20px;
+  }  

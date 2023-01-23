@@ -1,36 +1,39 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from "react-oidc-context";
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAppCtx } from '../AppProvider';
+import LoadingScreen from "../components/loading";
 import './Login.css';
 
 function Login() {
   const { userInfo, action } = useAppCtx();
   const auth = useAuth();
   const location = useLocation();
+  const [isReady, setIsReady] = useState(false);
 
   console.log('rendering..... login', auth.user)
   useEffect(() => {
-    if (auth.isAuthenticated) {
-      setTimeout(() => {
+    if (auth.isAuthenticated && !userInfo.ready) {
         action.setUserInfo({
           ready: true,
           username: auth.user?.profile.preferred_username,
           displayName: auth.user?.profile.given_name + ' ' + auth.user?.profile.family_name
-        })
-      }, 1000)
+      });
+      setTimeout(() => {
+          setIsReady(true);
+      }, 1000);
     }
-  }, [auth, userInfo.ready])
+  }, [auth, userInfo.ready]);
 
   switch (auth.activeNavigator) {
     case "signinSilent":
-      return <div>Signing you in...</div>;
+      return <LoadingScreen text={"Signing you in..."} />;
     case "signoutRedirect":
-      return <div>Signing you out...</div>;
+      return <LoadingScreen text={"Signing you out..."} />;
   }
 
   if (auth.isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen text={"Loading..."} />;
   }
 
   if (auth.error) {
@@ -38,18 +41,14 @@ function Login() {
   }
 
   if (auth.isAuthenticated) {
-    if (userInfo.ready) {
+    if (isReady) {
       const backTo = location.state?.backTo || '/home'
       if(action.isStaff()){
-        return(
-            <Navigate to = '/announcement' replace />
-        )    
-    }
-      return (
-        <Navigate to={backTo} replace />
-      );
+          return <Navigate to = '/announcement' replace />
+      }
+      return <Navigate to={backTo} replace />
     } else {
-      return <div>Waiting a minute...</div>;
+      return <LoadingScreen text="Waiting a minute..." />;
     }
   }
 
