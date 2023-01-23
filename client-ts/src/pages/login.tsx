@@ -23,7 +23,7 @@ function Login() {
           setIsReady(true);
       }, 1000);
     }
-  }, [auth, userInfo.ready]);
+  }, [action, auth, userInfo.ready]);
 
   switch (auth.activeNavigator) {
     case "signinSilent":

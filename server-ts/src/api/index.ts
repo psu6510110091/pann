@@ -11,6 +11,6 @@ router
   })
   
   .use('/api/announcement', authMiddleware, announcement.routes())
-  .use('/api/user_result', authMiddleware, user_result.routes())
+  .use('/api/userResult', authMiddleware, user_result.routes())
 
 export default router
