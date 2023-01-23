@@ -8,6 +8,7 @@ import PannAppBar from "../components/pann-app-bar";
 import AnnouncementForm from "../components/announcement-form";
 import Announcement from "../models/Announcement";
 import Repo from '../repositories'
+import './background.css';
 
 function AnnouncementList() {
   const auth = useAuth();
