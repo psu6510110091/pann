@@ -4,6 +4,7 @@ import { Box } from "@mui/system";
 import { PushPin, Close, CheckCircle } from '@mui/icons-material/';
 import UserResult, { ResultType } from "../models/UserResult";
 import Repo from '../repositories'
+import './user-result-card.css'
 
 interface Prop {
   userResult: UserResult;
@@ -18,48 +19,56 @@ function UserResultCard(props: Prop) {
     if(!userResult.viewDateTime){
       const result = await Repo.userResults.view(userResult.id)
       if(result) {
-        props.onUpdateUserResult(result)
-        setPopup(true)
+          props.onUpdateUserResult(result)
+          setPopup(true)
       }
-    }else{
+  }else{
       setPopup(true)
-    }
+      }
   };
 
   const handleAcknowledge = async () => {
-    const result = await Repo.userResults.acknowledge(userResult.id)
-    if(result) {
-      props.onUpdateUserResult(result)
-    }
+      const result = await Repo.userResults.acknowledge(userResult.id)
+      if(result) {
+        props.onUpdateUserResult(result)
+      }
   };
 
   const handleToggleIsPinned = async () => {
-    const result = await Repo.userResults.toggleIsPinned(userResult.id)
-    if(result) {
-      props.onUpdateUserResult(result)
-    }
+      const result = await Repo.userResults.toggleIsPinned(userResult.id)
+      if(result) {
+        props.onUpdateUserResult(result)
+      }
   };
 
   const getConditionalRemark = () => {
-    if(userResult.resultType === ResultType.POSITIVE){
-      return userResult.announcement.remarkIfPositive
-    }else if(userResult.resultType === ResultType.NEGATIVE){
-      return userResult.announcement.remarkIfNegative
-    }
-  }
+      if(userResult.resultType === ResultType.POSITIVE){
+          return userResult.announcement.remarkIfPositive
+      }else if(userResult.resultType === ResultType.NEGATIVE){
+          return userResult.announcement.remarkIfNegative
+      }
+  };
 
   return (
     <Box>
-      <Card sx={{ maxWidth: 500, height: 250 }}>
-        <CardHeader
-          sx={{ height: '30%' }}
-          title={userResult.announcement?.topic}
-          subheader={new Date(userResult.announcement?.pubDateTime!.toString()).toLocaleString('en-GB')}
-          action={
-            <IconButton color={userResult.isPinned ? "primary" : "default"} onClick={handleToggleIsPinned}>
-              <PushPin sx={{ fontSize: 30 }} />
-            </IconButton>
-          }
+    <Card className="card-edge-hover" sx={{
+        maxWidth: 500,
+        height: 250,
+        transition: 'all 0.2s ease-in-out',
+        '&:hover': {
+            transform: 'scale(1.025)',
+            boxShadow: '0px 0px 10px 0px ##60bff'
+        }
+    }}>
+      <CardHeader
+        sx={{ height: '30%' }}
+        title={userResult.announcement?.topic}
+        subheader={new Date(userResult.announcement?.pubDateTime!.toString()).toLocaleString('en-GB')}
+        action={
+          <IconButton color={userResult.isPinned ? "primary" : "default"} onClick={handleToggleIsPinned}>
+            <PushPin sx={{ fontSize: 30 }} />
+          </IconButton>
+        }
         />
         <CardActionArea sx={{ height: '56%' }} onClick={onOpenPopup}>
           <CardContent sx={{ height: '40%' }}>
@@ -84,7 +93,7 @@ function UserResultCard(props: Prop) {
           </CardActions>
         </CardActionArea>
       </Card>
-
+  
       <Dialog PaperProps={{ sx: { minWidth: "50%", maxHeight: "55%" } }} open={popup} onClose={() => setPopup(false)}>
         <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between' }}>
           {userResult.announcement?.topic}
@@ -116,7 +125,7 @@ function UserResultCard(props: Prop) {
         }
       </Dialog>
     </Box>
-  )
+  )  
 }
 
 export default UserResultCard;
