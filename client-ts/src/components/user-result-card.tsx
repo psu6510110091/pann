@@ -50,25 +50,25 @@ function UserResultCard(props: Prop) {
   };
 
   return (
-    <Box>
-    <Card className="card-edge-hover" sx={{
-        maxWidth: 500,
-        height: 250,
-        transition: 'all 0.2s ease-in-out',
-        '&:hover': {
-            transform: 'scale(1.025)',
-            boxShadow: '0px 0px 10px 0px ##60bff'
-        }
-    }}>
-      <CardHeader
-        sx={{ height: '30%' }}
-        title={userResult.announcement?.topic}
-        subheader={new Date(userResult.announcement?.pubDateTime!.toString()).toLocaleString('en-GB')}
-        action={
-          <IconButton color={userResult.isPinned ? "primary" : "default"} onClick={handleToggleIsPinned}>
-            <PushPin sx={{ fontSize: 30 }} />
-          </IconButton>
-        }
+    <Box m={2}>
+      <Card className="card-edge-hover" sx={{
+          maxWidth: 750,
+          height: 250,
+          transition: 'all 0.2s ease-in-out',
+          '&:hover': {
+              transform: 'scale(1.025)',
+              boxShadow: '0px 0px 10px 0px #60bff'
+          }
+      }}>
+        <CardHeader
+          sx={{ height: '30%' }}
+          title={userResult.announcement?.topic}
+          subheader={new Date(userResult.announcement?.pubDateTime!.toString()).toLocaleString('en-GB')}
+          action={
+            <IconButton color={userResult.isPinned ? "primary" : "default"} onClick={handleToggleIsPinned}>
+              <PushPin sx={{ fontSize: 30 }} />
+            </IconButton>
+          }
         />
         <CardActionArea sx={{ height: '56%' }} onClick={onOpenPopup}>
           <CardContent sx={{ height: '40%' }}>
